@@ -5,9 +5,10 @@
     "build": "next build",
     "start": "next start",
     "_lint": "eslint --config ./.eslintrc.json --ext js --ext jsx",
-    "lint": "npm run _lint -- .",
-    "lint:fix": "npm run _lint -- --fix .",
-    "format": "prettier --write './**/*.{js,jsx,md,json}' --config ./.prettierrc"
+    "lint": "yarn _lint -- .",
+    "lint:fix": "yarn _lint -- --fix .",
+    "format": "prettier --write './**/*.{js,jsx,md,json}' --config ./.prettierrc",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.0.2",
@@ -36,6 +37,13 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.5",
     "prettier": "^2.5.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --config ./.eslintrc.json --ext js --ext jsx --fix"
+    ]
   }
 }
