@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import React from 'react';
+import Link from '../src/component/Link';
 
 export default function About() {
   return (
@@ -9,5 +10,5 @@ export default function About() {
       </Link>{' '}
       page.
     </div>
-  )
+  );
 }
