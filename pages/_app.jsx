@@ -1,15 +1,16 @@
+import React, { useEffect, useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
-
-import * as React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
+
 import { useApollo } from '../apollo/client';
 import theme from '../src/styles/theme';
 import createEmotionCache from '../src/styles/createEmotionCache';
 
+// Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
 export default function App({
@@ -19,21 +20,33 @@ export default function App({
 }) {
   const apolloClient = useApollo(pageProps.initialApolloState);
 
+  // since MUI V5 still has problem with ssr, this is a temperary fix for className mismatch
+  // see more on https://github.com/mui-org/material-ui/issues/27512
+  const [shouldRender, setShouldRender] = useState(
+    process.env.NODE_ENV === 'production'
+  );
+  useEffect(() => {
+    setShouldRender(true);
+  }, []);
+
   return (
-    <ApolloProvider client={apolloClient}>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Component {...pageProps} />
+          {shouldRender && <Component {...pageProps} />}
         </ThemeProvider>
-      </CacheProvider>
-    </ApolloProvider>
+      </ApolloProvider>
+    </CacheProvider>
   );
 }
+App.defaultProps = {
+  emotionCache: {}
+};
 
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,

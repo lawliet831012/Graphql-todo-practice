@@ -1,13 +1,19 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const typeDefs = gql`
-  type User {
+  type Todo {
     id: ID!
-    name: String!
-    status: String!
+    task: String!
+    done: Boolean
   }
 
   type Query {
-    viewer: User
+    list: [Todo]
+  }
+
+  type Mutation {
+    createTodo(task: String!): Todo
+    toggleTodo(id: ID!): String
+    deleteTodo(id: ID!): String
   }
 `;

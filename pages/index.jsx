@@ -1,42 +1,50 @@
-import React from 'react';
-import gql from 'graphql-tag';
+import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import Link from '../src/component/Link';
+import Container from '@mui/material/Container';
+import CircularProgress from '@mui/material/CircularProgress';
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+
+import { todoGQL } from '../src/gqls';
+import { CreateTaskBar, TaskBar } from '../src/component';
+import useStyle from '../src/styles/pages';
 import { initializeApollo } from '../apollo/client';
 
-const ViewerQuery = gql`
-  query ViewerQuery {
-    viewer {
-      id
-      name
-      status
-    }
-  }
-`;
-
 function Index() {
-  const {
-    data: { viewer }
-  } = useQuery(ViewerQuery);
+  const { loading, error, data } = useQuery(todoGQL.TODO_QUERY);
+  const classes = useStyle();
+
+  const renderList = useMemo(
+    () =>
+      loading ? (
+        <CircularProgress />
+      ) : (
+        data.list.map((todo) => (
+          <ListItem key={`todo-${todo.id}`}>
+            <TaskBar todo={todo} />
+          </ListItem>
+        ))
+      ),
+    [loading, data]
+  );
+
+  if (error) return null;
 
   return (
-    <div>
-      You&apos;re signed in as {viewer.name} and you&apos;re {viewer.status}{' '}
-      goto{' '}
-      <Link href="/about">
-        <a>static</a>
-      </Link>{' '}
-      page.
-    </div>
+    <Container maxWidth="md" className={classes.container}>
+      <List subheader={<ListSubheader component="p">Todo list</ListSubheader>}>
+        {renderList}
+        <ListItem>
+          <CreateTaskBar />
+        </ListItem>
+      </List>
+    </Container>
   );
 }
 
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
-
-  await apolloClient.query({
-    query: ViewerQuery
-  });
 
   return {
     props: {

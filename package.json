@@ -20,15 +20,18 @@
     "@mui/material": "^5.2.7",
     "@mui/styles": "^5.2.3",
     "apollo-server-micro": "^2.14.2",
+    "babel-preset-next": "^1.4.0",
     "clsx": "^1.1.1",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.12.6",
     "next": "latest",
     "prop-types": "^15.6.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.7",
     "eslint": "^8.6.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.3.0",
