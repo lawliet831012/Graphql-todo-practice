@@ -7,6 +7,9 @@ export default makeStyles((theme) => ({
   },
   done: {
     color: theme.palette.error.main,
-    textDecoration: 'line-through'
+    textDecoration: 'line-through',
+    '&:hover': {
+      textDecoration: 'line-through'
+    }
   }
 }));

@@ -44,9 +44,6 @@ export default function App({
     </CacheProvider>
   );
 }
-App.defaultProps = {
-  emotionCache: {}
-};
 
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,
